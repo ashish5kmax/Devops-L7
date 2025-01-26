@@ -2,26 +2,23 @@ pipeline {
     agent any
 
     environment {
-        // Replace with your SonarQube installation name
-        SONARQUBE_SERVER = 'SonarQube' 
+        SONARQUBE_SERVER = 'SonarQube'
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                // Pull code from your repository
-                git 'https://github.com/your-repo/hello-world.git'
+                git branch: 'main',
+                    url: 'https://github.com/ashish5kmax/Devops-L7.git',
+                    credentialsId: 'c72da4aa-0d6d-4d81-8090-662cd3608051' // Use the credentials ID
             }
         }
 
         stage('Static Code Analysis with SonarQube') {
             steps {
                 script {
-                    // Run SonarQube analysis
                     withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                        sh '''
-                        sonar-scanner
-                        '''
+                        sh 'sonar-scanner'
                     }
                 }
             }
@@ -29,7 +26,6 @@ pipeline {
 
         stage('Build and Run') {
             steps {
-                // Execute the Python script
                 sh 'python3 hello_world.py'
             }
         }
